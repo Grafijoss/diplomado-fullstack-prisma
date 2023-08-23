@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ES2017",
+        "module": "commonjs",
+        "outDir": "dist",
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "include": ["src"],           // al momento de compilar tenga en cuenta todo src
+    "exclude": ["node_modules"]   // al momento de compilar NO tenga en cuenta 
+}
