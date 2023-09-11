@@ -6,7 +6,8 @@ import {
     getClienteById,
     createCliente,
     actualizarCliente,
-    deleteCliente
+    deleteCliente,
+    checkCliente
 } from '../../../controllers/v1/clientes'
 
 // importamos los middlewares
@@ -23,6 +24,7 @@ const router = express.Router();
 // el primer campo es el middleware y el segundo es el controlador
 // ahora el middleware se inyecta en cada ruta
 // router.get('/', getAllClientes)
+router.post('/check', [updateDateMiddleware, checkCliente])
 router.get('/', [updateDateMiddleware, getAllClientes])
 router.get('/:id', [updateDateMiddleware, getClienteById])
 router.post('/', [updateDateMiddleware, createCliente])

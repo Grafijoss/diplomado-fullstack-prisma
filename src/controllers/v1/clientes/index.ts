@@ -6,6 +6,31 @@ import { Request, Response } from 'express'
 // Creamos una nueva instancia de prisma
 const prisma = new PrismaClient()
 
+const checkCliente = async (req: Request, res: Response ) => {
+
+    const { correo } = req.body;
+
+    try {
+        const result = await prisma.clientes.findUnique({
+            where: { correo: correo }
+        });
+
+        if(result) {
+            console.log('SI EXISTE')
+            return res.status(400).json({ message: 'El cliente ya existe'})
+        }
+        console.log('NO EXISTE')
+        return res.status(200).json({
+            usuario: correo,
+            message: 'El cliente no existe'
+        })
+    } catch (error) {
+        console.log('Se presento un error', error)
+        return res.status(500).json(error)
+    }
+}
+
+
 const getAllClientes = async (req: Request, res: Response ) => {
 
     try {
@@ -35,13 +60,25 @@ const getClienteById = async (req: Request, res: Response ) => {
 
 // POST
 const createCliente = async (req: Request, res: Response ) => {
-
     try {
+        const resultCheck = await prisma.clientes.findUnique({
+            where: { correo: req.body.correo }
+        });
+
+        if (resultCheck) {
+            console.log('SI EXISTE')
+            return res.status(400).json({ message: 'El cliente ya existe'})
+        }
+
         const result = await prisma.clientes.create({data: req.body});
-        res.status(200).json(result)
+        return res.status(200).json({
+            ...result,
+            message: 'El cliente se creo correctamente'
+        })
+
     } catch (error) {
         console.log('Se presento un error', error)
-        res.status(500).json(error)
+        return res.status(500).json(error)
     }
 }
 
@@ -89,4 +126,5 @@ export {
     createCliente,
     actualizarCliente,
     deleteCliente,
+    checkCliente
 }
